@@ -36,7 +36,7 @@ TOWN = [
   "Vitacura"
 ]
 
-# Data insertion format
+# Data load format
 DATA_SEPARATOR = "#####"
 MIN_DATA_DRIVERS = 5;
 MIN_DATA_ROUTES = 8;

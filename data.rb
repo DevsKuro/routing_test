@@ -1,12 +1,12 @@
 require './constant'
 
-def cities_insertion()
+def load_cities()
   TOWN.each do |cities|
     City.create(name: cities)
   end
 end
 
-def drivers_insertion()
+def load_drivers()
   file='drivers.txt'
   f = File.open(file, "r")
   driver_data = Array.new
@@ -46,7 +46,7 @@ def drivers_insertion()
   f.close
 end
 
-def routes_insertion()
+def load_routes()
   file='routes.txt'
   f = File.open(file, "r")
   route_data = Array.new
@@ -57,6 +57,15 @@ def routes_insertion()
       route_data << line
     else
       if(route_data.length >= MIN_DATA_ROUTES)
+
+        if(route_data[5] == "\n" || route_data[5] == " " )
+          route_data[5] = "-1"
+        end
+
+        if(route_data[6] == "\n" || route_data[6] == " " )
+          route_data[6] = "-1"
+        end
+
         #Add new route data
         Route.create(
           starts_at: route_data[0],
@@ -71,10 +80,12 @@ def routes_insertion()
         stops = route_data[4].to_i
         stops_counter = 0
         while (stops_counter < stops)
-          RouteCity.create(
-            routes_id: Route.maximum(:id),
-            cities: route_data[stops_counter + 7]
-          )
+          unless (route_data[stops_counter + MIN_DATA_ROUTES-1] rescue false)
+            RouteCity.create(
+              routes_id: Route.maximum(:id),
+              cities: route_data[stops_counter + MIN_DATA_ROUTES-1]
+            )
+          end
           stops_counter += 1
         end
 
@@ -90,7 +101,7 @@ def routes_insertion()
   f.close
 end
 
-def vehicles_insertion()
+def load_vehicles()
   file='vehicles.txt'
   f = File.open(file, "r")
   route_data = Array.new
@@ -121,8 +132,8 @@ def vehicles_insertion()
 end
 
 def load_data()
-  cities_insertion()
-  drivers_insertion()
-  routes_insertion()
-  vehicles_insertion()
+  load_cities()
+  load_drivers()
+  load_routes()
+  load_vehicles()
 end
