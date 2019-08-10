@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby -wKU
-
 require 'sqlite3'
 require 'active_record'
 
@@ -21,32 +19,40 @@ ActiveRecord::Schema.define do
       table.integer :driver_id
     end
 
-    create_table :vehicles do |table|
+    create_table :vehicles, force: true do |table|
         table.integer :capacity
         table.string :load_type
         table.integer :driver_id
     end
 
-    create_table :drivers do |table|
+    create_table :drivers, force: true do |table|
         table.string :name
         table.string :phone
         table.string :email
         table.integer :vehicle_id
       end
 
-      create_table :cities do |table|
+      create_table :cities, force: true do |table|
         table.string :name
       end
 
-      create_table :route_cities do |table|
+      create_table :route_cities, force: true do |table|
         table.string :cities
         table.references :routes
       end
 
-      create_table :banned_cities do |table|
+      create_table :banned_cities, force: true do |table|
         table.string :cities
         table.references :driver
       end
+
+      create_table :assigned_routes, force: true do |table|
+        table.references :route
+        table.references :driver
+        table.datetime :starts_at
+        table.datetime :ends_at
+      end
+
 end
 
 #Defining active record model
@@ -75,5 +81,10 @@ class BannedCity < ApplicationRecord
 end
 
 class Vehicle < ApplicationRecord
+  belongs_to :driver
+end
+
+class AssignedRoute < ApplicationRecord
+  belongs_to :route
   belongs_to :driver
 end

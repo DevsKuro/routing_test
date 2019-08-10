@@ -59,11 +59,11 @@ def load_routes()
       if(route_data.length >= MIN_DATA_ROUTES)
 
         if(route_data[5] == "\n" || route_data[5] == " " )
-          route_data[5] = "-1"
+          route_data[5] = "DEFAULT_INDEX_UNASSIGNED"
         end
 
         if(route_data[6] == "\n" || route_data[6] == " " )
-          route_data[6] = "-1"
+          route_data[6] = "DEFAULT_INDEX_UNASSIGNED"
         end
 
         #Add new route data
@@ -73,14 +73,14 @@ def load_routes()
           load_type: route_data[2],
           load_sum: route_data[3],
           stops_amount: route_data[4],
-          vehicle_id: route_data[5],
-          driver_id: route_data[6]
+          vehicle_id: DEFAULT_INDEX_UNASSIGNED,
+          driver_id: DEFAULT_INDEX_UNASSIGNED
         )
 
         stops = route_data[4].to_i
         stops_counter = 0
         while (stops_counter < stops)
-          unless (route_data[stops_counter + MIN_DATA_ROUTES-1] rescue false)
+          if (route_data.length > (stops_counter + MIN_DATA_ROUTES-1))
             RouteCity.create(
               routes_id: Route.maximum(:id),
               cities: route_data[stops_counter + MIN_DATA_ROUTES-1]
@@ -113,6 +113,11 @@ def load_vehicles()
     else
       if(route_data.length >= MIN_DATA_VEHICLES)
         #Add new vehicles data
+
+        if(route_data[2] == "\n" || route_data[2] == " " )
+          route_data[2] = "DEFAULT_INDEX_UNASSIGNED"
+        end
+
         Vehicle.create(
             capacity: route_data[0],
             load_type: route_data[1],
