@@ -8,7 +8,7 @@ end
 
 def load_drivers()
   file='drivers.txt'
-  f = File.open(file, "r")
+  f = File.open(file, "a+")
   driver_data = Array.new
   id_counter = 0
 
@@ -48,7 +48,7 @@ end
 
 def load_routes()
   file='routes.txt'
-  f = File.open(file, "r")
+  f = File.open(file, "a+")
   route_data = Array.new
   id_counter = 0
 
@@ -103,7 +103,7 @@ end
 
 def load_vehicles()
   file='vehicles.txt'
-  f = File.open(file, "r")
+  f = File.open(file, "a+")
   route_data = Array.new
   id_counter = 0
 
